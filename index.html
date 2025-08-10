@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>No Time Limit Faucet -- Single File</title>
+<script type='text/javascript' src='//pl27388796.profitableratecpm.com/14/f6/33/14f633d5da76c4703d123dbe1f57fabb.js'></script>
+<style>
+  :root{
+    --bg:#071018; --panel:#0f1b22; --accent:#36d6b2; --muted:#9fb0b0;
+    --card:#08161a;
+  }
+  *{box-sizing:border-box;font-family:Inter,Segoe UI,Roboto,'Noto Sans',Arial,sans-serif}
+  body{margin:0;background:linear-gradient(180deg,var(--bg),#031217);color:#eaf8f6}
+  .wrap{min-height:100vh;display:flex;flex-direction:column}
+  .top-bar{padding:10px 18px;background:linear-gradient(180deg,#041016 0%, #07151a 100%);border-bottom:1px solid rgba(255,255,255,0.03)}
+  .logo{font-weight:800;font-size:18px;color:var(--accent)}
+  .main-content{flex:1;padding:18px}
+  
+  /* স্লাইডেবল সেকশনের জন্য নতুন স্টাইল */
+  .menu-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+  .menu-horizontal{
+    display:flex;
+    overflow-x:auto;
+    list-style:none;
+    padding:0;
+    margin:12px 0 0 0;
+    gap:8px;
+    padding-bottom:10px;
+  }
+  .menu-horizontal::-webkit-scrollbar{
+    height: 4px; /* ওয়েবকিট ব্রাউজারের জন্য স্ক্রোল বারের উচ্চতা */
+  }
+  .menu-horizontal::-webkit-scrollbar-thumb{
+    background-color: rgba(255,255,255,0.2); /* স্ক্রোল বারের থাম্বের রঙ */
+    border-radius: 10px;
+  }
+  .menu-horizontal::-webkit-scrollbar-track {
+    background-color: transparent; /* স্ক্রোল বারের ট্র্যাকের রঙ */
+  }
+  /* Firefox এর জন্য স্ক্রোল বারের স্টাইল */
+  .menu-horizontal {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
+  }
+  /* অর্ধেক অপশন দেখানোর জন্য */
+  .menu-horizontal li:nth-child(4) {
+    min-width: 50%;
+  }
+
+  .menu-horizontal li{flex-shrink:0;padding:8px 14px;border-radius:8px;color:var(--muted);cursor:pointer;border:1px solid transparent}
+  .menu-horizontal li:hover{background:rgba(255,255,255,0.02);color:#fff}
+  .menu-horizontal li.active{background:rgba(54,214,178,0.08);color:var(--accent);font-weight:700;border:1px solid var(--accent)}
+  .header{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+  .title{font-size:20px;font-weight:700}
+  .summary{background:var(--panel);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);display:flex;justify-content:space-between;align-items:center}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-top:14px}
+  .coin{background:var(--card);padding:12px;border-radius:10px;text-align:center;border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:transform .12s,box-shadow .12s}
+  .coin:hover{transform:translateY(-4px);box-shadow:0 8px 18px rgba(0,0,0,0.6)}
+  .coin svg{width:56px;height:56px;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto}
+  .coin .name{font-weight:700;margin-bottom:6px}
+  .coin .bal{font-size:13px;color:var(--muted);margin-bottom:8px}
+  .btn{display:inline-block;padding:8px 10px;border-radius:8px;background:linear-gradient(90deg,var(--accent),#5aa8ff);color:#021;cursor:pointer;font-weight:700;border:none}
+  .small{padding:6px 8px;font-size:13px;border-radius:7px;cursor:pointer}
+  .panel{background:var(--panel);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+  footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  input[type="number"], select{padding:6px;border-radius:6px;border:1px solid rgba(255,255,255,0.05);background:transparent;color:inherit}
+  .tasks{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+  .task{display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(255,255,255,0.02);border-radius:8px}
+  .toast{position:fixed;right:18px;bottom:18px;background:#052018;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 6px 18px rgba(0,0,0,.6);z-index:9999;color:#bfffe8}
+  @media (max-width: 820px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div class="logo">NoTimeFaucet</div>
+    <div class="menu-wrapper">
+      <ul class="menu-horizontal" id="menu">
+        <li data-view="faucets" class="active">Faucets</li>
+        <li data-view="tools" style="min-width: 120px;">Auto Faucet</li>
+        <li data-view="ptc">PTC (Ads)</li>
+        <li data-view="offerwall">Offerwall</li>
+        <li data-view="games">Games</li>
+        <li data-view="mining">Mining</li>
+        <li data-view="balances">My Balances</li>
+      </ul>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <div class="header">
+      <div class="title">Faucets -- Claim Anytime</div>
+      <div class="summary" id="summaryBox">
+        <div style="font-weight:700">Summary Balances</div>
+        <div id="summaryText" style="color:var(--muted);font-size:13px">Loading...</div>
+      </div>
+    </div>
+    
+    <div style="margin: 20px 0; text-align: center;">
+      <script type="text/javascript">
+          atOptions = {
+              'key' : 'd56e7ca5c98692ba92440ebfb298a154',
+              'format' : 'iframe',
+              'height' : 90,
+              'width' : 728,
+              'params' : {}
+          };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/d56e7ca5c98692ba92440ebfb298a154/invoke.js"></script>
+    </div>
+
+    <div id="viewContainer">
+      <section id="faucets" class="view">
+        <div style="margin-top:8px;color:var(--muted);font-size:13px">Click any coin to claim. There is no time limit.</div>
+        <div class="grid" id="coinsGrid"></div>
+      </section>
+
+      <section id="ptc" class="view" style="display:none">
+        <div class="panel">
+          <h3>PTC -- View Ads</h3>
+          <div style="margin-top:10px;color:var(--muted)">Watch a simulated ad to earn small reward.</div>
+          <div style="margin-top:12px" class="row">
+            <button class="btn" id="viewAd">View Ad (5s)</button>
+            <div id="adStatus" style="color:var(--muted);margin-left:8px"></div>
+          </div>
+        </div>
+      </section>
+      
+      <section id="offerwall" class="view" style="display:none">
+        <div class="panel">
+          <h3>Offerwall -- Earn by completing tasks</h3>
+          <div style="color:var(--muted);margin-top:6px">Click a task to complete it and get rewarded (GGM token).</div>
+          <div class="tasks" id="offersList"></div>
+        </div>
+      </section>
+
+      <section id="games" class="view" style="display:none">
+        <div class="panel">
+          <h3>Dice Game</h3>
+          <div style="color:var(--muted);margin-top:6px">Bet and roll a dice -- roll 5 or 6 to win (1.8x payout).</div>
+          <div style="margin-top:12px" class="row">
+            <label>Coin:</label>
+            <select id="gameCoin">
+            </select>
+            <label>Bet:</label>
+            <input id="betAmt" type="number" min="0" value="1" />
+            <button class="btn" id="playDice">Play</button>
+          </div>
+          <div id="gameResult" style="margin-top:12px;color:var(--muted)"></div>
+        </div>
+      </section>
+
+      <section id="mining" class="view" style="display:none">
+        <div class="panel">
+          <h3>Mining Simulator</h3>
+          <div style="color:var(--muted);margin-top:6px">Start mining to slowly earn small amounts. This is simulated.</div>
+          <div style="margin-top:12px" class="row">
+            <button class="btn" id="startMine">Start Mining</button>
+            <button class="small" id="stopMine">Stop</button>
+            <div id="mineStatus" style="color:var(--muted);margin-left:8px">Stopped</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tools" class="view" style="display:none">
+        <div class="panel">
+          <h3>Tools</h3>
+          <div style="color:var(--muted);margin-top:8px">Auto Faucet: auto-claim chosen coin every X seconds (client-side).</div>
+          <div style="margin-top:12px" class="row">
+            <select id="autoCoin"></select>
+            <input id="autoInterval" type="number" min="1" value="10" /> <span style="color:var(--muted)">seconds</span>
+            <button class="btn" id="toggleAuto">Start Auto</button>
+          </div>
+          <div style="margin-top:12px" id="autoStatus" class="small" >Auto off</div>
+        </div>
+      </section>
+
+      <section id="balances" class="view" style="display:none">
+        <div class="panel">
+          <h3>All Balances</h3>
+          <div id="allBalances" style="margin-top:12px"></div>
+        </div>
+      </section>
+      
+      <div style="margin: 20px 0; text-align: center;">
+        <script async="async" data-cfasync="false" src="//pl27388801.profitableratecpm.com/dcd70d5b52b323db90975897fc8e1b68/invoke.js"></script>
+        <div id="container-dcd70d5b52b323db90975897fc8e1b68"></div>
+      </div>
+
+      <footer>
+        <div>&copy; 2025 NoTimeFaucet. All Rights Reserved.</div>
+      </footer>
+    </div>
+  </main>
+</div>
+
+<div id="toastWrap"></div>
+
+<script>
+/* ---------- Inline SVG icons for reliable display ---------- */
+const ICONS = {
+  BTC: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs></defs>
+    <circle cx="32" cy="32" r="30" fill="#f7931a"/><text x="32" y="40" text-anchor="middle" font-size="30" font-weight="700" fill="#fff" font-family="Arial">B</text></svg>`,
+  DOGE: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="30" fill="#c2a64b"/><text x="32" y="40" text-anchor="middle" font-size="28" font-weight="700" fill="#fff" font-family="Arial">Ð</text></svg>`,
+  LTC: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="30" fill="#bdbfc4"/><text x="32" y="40" text-anchor="middle" font-size="28" font-weight="700" fill="#123" font-family="Arial">Ł</text></svg>`,
+  ETH: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <rect width="64" height="64" fill="none"/><g transform="translate(8,6) scale(0.9)">
+    <polygon points="24 0 0 16 24 32 48 16" fill="#627eea"/><polygon points="24 32 24 48 0 32" fill="#233447" opacity="0.06"/></g></svg>`,
+  DASH:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="30" fill="#008de4"/><text x="32" y="40" text-anchor="middle" font-size="30" font-weight="700" fill="#fff" font-family="Arial">D</text></svg>`,
+  XMR:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="30" fill="#ff6600"/><text x="32" y="40" text-anchor="middle" font-size="28" font-weight="800" fill="#fff" font-family="Arial">M</text></svg>`,
+  BCH:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="30" fill="#4caf50"/><text x="32" y="40" text-anchor="middle" font-size="26" font-weight="700" fill="#fff" font-family="Arial">Ƀ</text></svg>`,
+  XLM:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="30" fill="#0a0a0a"/><path d="M18 40 L32 20 L46 40 Z" fill="#fff"/></svg>`,
+  XRP:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="30" fill="#1a6ab9"/><path d="M18 30 L32 24 L46 30 L32 36 Z" fill="#fff"/></svg>`,
+  TRX:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="30" fill="#ff0022"/><polygon points="32,14 18,46 46,46" fill="#fff"/></svg>`,
+  GGM:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="30" fill="#3a1f5b"/><text x="32" y="38" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">👾</text></svg>`,
+  SOL:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <rect width="64" height="64" fill="none"/><g transform="translate(8,16)"><rect x="0" y="0" width="48" height="8" rx="3" fill="#00FFA3" opacity="0.9"/><rect x="0" y="12" width="48" height="8" rx="3" fill="#7A5FFF" opacity="0.9"/><rect x="0" y="24" width="48" height="8" rx="3" fill="#00FFA3" opacity="0.9"/></g></svg>`
+};
+
+/* ---------- Coins configuration ---------- */
+const COINS = [
+  {id:'BTC', name:'Bitcoin', icon:ICONS.BTC, min:100, max:800, scale:0.00001},
+  {id:'DOGE',name:'Dogecoin',icon:ICONS.DOGE,min:50,max:600,scale:0.4},
+  {id:'LTC', name:'Litecoin',icon:ICONS.LTC,min:80,max:700,scale:0.005},
+  {id:'ETH', name:'Ethereum',icon:ICONS.ETH,min:60,max:500,scale:0.0003},
+  {id:'DASH',name:'Dash',icon:ICONS.DASH,min:40,max:300,scale:0.02},
+  {id:'XMR', name:'Monero',icon:ICONS.XMR,min:40,max:300,scale:0.02},
+  {id:'BCH', name:'BitcoinCash',icon:ICONS.BCH,min:70,max:500,scale:0.002},
+  {id:'XLM', name:'Stellar',icon:ICONS.XLM,min:30,max:300,scale:0.1},
+  {id:'XRP', name:'Ripple',icon:ICONS.XRP,min:25,max:200,scale:0.05},
+  {id:'TRX', name:'Tron',icon:ICONS.TRX,min:20,max:200,scale:0.5},
+  {id:'GGM', name:'GoGoMonster',icon:ICONS.GGM,min:500,max:2000,scale:1},
+  {id:'SOL', name:'Solana',icon:ICONS.SOL,min:60,max:600,scale:0.1}
+];
+
+/* ---------- State & persistence ---------- */
+let state = { balances:{}, claims:{}, offersCompleted:[], mining:false };
+function loadState(){
+  try{
+    const s = JSON.parse(localStorage.getItem('nofaucet_v2')||'{}');
+    if(s) state = Object.assign(state, s);
+  }catch(e){}
+  COINS.forEach(c=>{ if(!(c.id in state.balances)) state.balances[c.id]=0; if(!(c.id in state.claims)) state.claims[c.id]=0; });
+}
+function saveState(){ localStorage.setItem('nofaucet_v2', JSON.stringify({
+  balances: state.balances, claims: state.claims, offersCompleted: state.offersCompleted
+})); }
+
+/* ---------- UI helpers ---------- */
+function toast(text, t=3000){
+  const el = document.createElement('div'); el.className='toast'; el.textContent = text;
+  document.getElementById('toastWrap').appendChild(el);
+  setTimeout(()=> el.remove(), t);
+}
+function formatNum(n){
+  if(n===0) return '0';
+  if(Math.abs(n) < 0.0000001) return Number(n).toFixed(8);
+  if(Math.abs(n) < 1) return Number(n).toFixed(6);
+  return Number(n).toFixed(6);
+}
+
+/* ---------- Rendering ---------- */
+function renderCoins(){
+  const grid = document.getElementById('coinsGrid'); grid.innerHTML='';
+  COINS.forEach(c=>{
+    const div = document.createElement('div'); div.className='coin';
+    div.innerHTML = `${c.icon}<div class="name">${c.name}</div><div class="bal">${c.id} • ${formatNum(state.balances[c.id]||0)}</div><div style="display:flex;justify-content:center"><button class="small" data-coin="${c.id}">Free Claim</button></div>`;
+    grid.appendChild(div);
+  });
+  grid.querySelectorAll('button[data-coin]').forEach(b=>{
+    b.addEventListener('click', e=> { const coin = e.currentTarget.getAttribute('data-coin'); handleClaim(coin); });
+  });
+}
+
+function renderSummary(){
+  const total = Object.values(state.balances).reduce((a,b)=>a+Number(b||0),0);
+  document.getElementById('summaryText').textContent = `Total (sum): ${formatNum(total)}`;
+  renderAllBalances();
+}
+
+function renderOffers(){
+  const offers = [
+    {id:'o1', title:'Join newsletter', reward:5},
+    {id:'o2', title:'Install demo app', reward:8},
+    {id:'o3', title:'Complete survey', reward:12}
+  ];
+  const box = document.getElementById('offersList'); box.innerHTML='';
+  offers.forEach(o=>{
+    const done = state.offersCompleted.includes(o.id);
+    const row = document.createElement('div'); row.className='task';
+    row.innerHTML = `<div style="min-width:0"><div style="font-weight:700">${o.title}</div><div style="color:var(--muted);font-size:13px">Reward: ${o.reward} GGM</div></div><div><button class="small" ${done? 'disabled':''} data-offer="${o.id}">${done? 'Completed':'Do Task'}</button></div>`;
+    box.appendChild(row);
+  });
+  box.querySelectorAll('button[data-offer]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const id = e.currentTarget.getAttribute('data-offer');
+      if(!state.offersCompleted.includes(id)){
+        state.offersCompleted.push(id);
+        const reward = {o1:5,o2:8,o3:12}[id]||5;
+        state.balances['GGM'] = (state.balances['GGM']||0) + reward;
+        saveState(); renderOffers(); renderCoins(); renderSummary();
+        toast(`Offer completed -- +${reward} GGM`);
+      }
+    });
+  });
+}
+
+function renderGameCoinOptions(){
+  const sel = document.getElementById('gameCoin'); sel.innerHTML='';
+  COINS.forEach(c=>{ const opt = document.createElement('option'); opt.value=c.id; opt.textContent=`${c.name} (${c.id})`; sel.appendChild(opt); });
+  const auto = document.getElementById('autoCoin'); auto.innerHTML='';
+  COINS.forEach(c=>{ const opt=document.createElement('option'); opt.value=c.id; opt.textContent=`${c.name} (${c.id})`; auto.appendChild(opt); });
+}
+
+function renderAllBalances(){
+  const container = document.getElementById('allBalances'); container.innerHTML='';
+  COINS.forEach(c=>{
+    const el = document.createElement('div'); el.style.padding='8px'; el.style.borderBottom='1px solid rgba(255,255,255,0.02)';
+    el.innerHTML = `<strong>${c.name} (${c.id})</strong> -- ${formatNum(state.balances[c.id]||0)} (claims: ${state.claims[c.id]||0})`;
+    container.appendChild(el);
+  });
+}
+
+/* ---------- Actions ---------- */
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+function handleClaim(coinId){
+  const coin = COINS.find(c=>c.id===coinId); if(!coin) return;
+  // no cooldown -- immediate claim
+  const pick = randInt(coin.min, coin.max);
+  const amount = (pick/1000) * coin.scale; // scale down, then multiply
+  state.balances[coinId] = Number((Number(state.balances[coinId]||0) + amount).toFixed(8));
+  state.claims[coinId] = (state.claims[coinId]||0) + 1;
+  saveState(); renderCoins(); renderSummary();
+  toast(`Claimed ${formatNum(amount)} ${coinId}`);
+}
+
+/* Games */
+function playDice(){
+  const coin = document.getElementById('gameCoin').value;
+  const bet = Number(document.getElementById('betAmt').value) || 0;
+  if(bet<=0){ toast('Enter a bet'); return; }
+  if((state.balances[coin]||0) < bet){ toast('Insufficient balance'); return; }
+  const roll = randInt(1,6);
+  const win = roll >= 5;
+  if(win){
+    const profit = Number((bet * 1.8).toFixed(8));
+    state.balances[coin] = Number((Number(state.balances[coin]||0) + profit).toFixed(8));
+    document.getElementById('gameResult').textContent = `You rolled ${roll} -- You won ${formatNum(profit)} ${coin}`;
+    toast(`Game win +${formatNum(profit)} ${coin}`);
+  } else {
+    state.balances[coin] = Number((Number(state.balances[coin]||0) - bet).toFixed(8));
+    document.getElementById('gameResult').textContent = `You rolled ${roll} -- You lost ${formatNum(bet)} ${coin}`;
+    toast(`Game lost -${formatNum(bet)} ${coin}`);
+  }
+  saveState(); renderSummary(); renderCoins(); renderAllBalances();
+}
+
+/* Mining simulator */
+let minerInterval = null;
+function startMining(){
+  if(minerInterval) return;
+  minerInterval = setInterval(()=>{
+    const c = COINS[randInt(0, COINS.length-1)];
+    const gain = Number((Math.random()*0.05* (c.scale||1)).toFixed(8));
+    state.balances[c.id] = Number((state.balances[c.id]||0) + gain).toFixed(8);
+    saveState(); renderSummary(); renderCoins();
+  }, 4000);
+  document.getElementById('mineStatus').textContent = 'Mining...';
+  toast('Mining started');
+}
+function stopMining(){
+  if(minerInterval){ clearInterval(minerInterval); minerInterval=null; document.getElementById('mineStatus').textContent='Stopped'; toast('Mining stopped'); }
+}
+
+/* PTC ad view */
+function viewAd(){
+  const status = document.getElementById('adStatus'); status.textContent = 'Playing ad...';
+  const seconds = 5; let t=seconds;
+  const id = setInterval(()=>{
+    status.textContent = `Watching... ${t}s`; t--;
+    if(t<0){ clearInterval(id);
+      const reward = 0.02;
+      state.balances['GGM'] = Number((state.balances['GGM']||0) + reward).toFixed(8);
+      saveState(); renderSummary(); renderCoins();
+      status.textContent = 'Done -- +0.02 GGM'; toast('Ad watched +0.02 GGM');
+      setTimeout(()=> status.textContent = '',1500);
+    }
+  },1000);
+}
+
+/* Auto faucet */
+let autoIntervalId = null;
+function toggleAuto(){
+  if(autoIntervalId){
+    clearInterval(autoIntervalId); autoIntervalId=null;
+    document.getElementById('toggleAuto').textContent='Start Auto'; document.getElementById('autoStatus').textContent='Auto off'; toast('Auto stopped'); return;
+  }
+  const coin = document.getElementById('autoCoin').value; const secs = Math.max(1, Number(document.getElementById('autoInterval').value||10));
+  autoIntervalId = setInterval(()=> handleClaim(coin), secs*1000);
+  document.getElementById('toggleAuto').textContent='Stop Auto'; document.getElementById('autoStatus').textContent=`Auto: ${coin} every ${secs}s`; toast('Auto started');
+}
+
+/* ---------- Menu & init ---------- */
+function setupMenu(){
+  document.querySelectorAll('#menu li').forEach(li=>{
+    li.addEventListener('click', ()=>{
+      // প্রতিটি মেনু অপশন ক্লিক করলে Direct Link অ্যাড খুলবে
+      window.open('https://www.profitableratecpm.com/v93jbm26p?key=bdf7ac59f2439455480faa5abee49eb5', '_blank');
+
+      document.querySelectorAll('#menu li').forEach(x=>x.classList.remove('active'));
+      li.classList.add('active');
+      const view = li.getAttribute('data-view');
+      document.querySelectorAll('.view').forEach(v=>v.style.display='none');
+      document.getElementById(view).style.display='block';
+      if(view==='offerwall') renderOffers();
+      if(view==='balances') renderAllBalances();
+    });
+  });
+}
+
+function init(){
+  loadState();
+  setupMenu();
+  renderCoins();
+  renderSummary();
+  renderGameCoinOptions();
+
+  // event bindings
+  document.getElementById('playDice').addEventListener('click', playDice);
+  document.getElementById('startMine').addEventListener('click', ()=>startMining());
+  document.getElementById('stopMine').addEventListener('click', stopMining);
+  document.getElementById('viewAd').addEventListener('click', viewAd);
+  document.getElementById('toggleAuto').addEventListener('click', toggleAuto);
+}
+
+init();
+</script>
+</body>
+</html>
