@@ -17,7 +17,6 @@
   .logo{font-weight:800;font-size:18px;color:var(--accent)}
   .main-content{flex:1;padding:18px}
   
-  /* স্লাইডেবল সেকশনের জন্য নতুন স্টাইল */
   .menu-wrapper {
     position: relative;
     overflow: hidden;
@@ -32,25 +31,19 @@
     padding-bottom:10px;
   }
   .menu-horizontal::-webkit-scrollbar{
-    height: 4px; /* ওয়েবকিট ব্রাউজারের জন্য স্ক্রোল বারের উচ্চতা */
+    height: 4px;
   }
   .menu-horizontal::-webkit-scrollbar-thumb{
-    background-color: rgba(255,255,255,0.2); /* স্ক্রোল বারের থাম্বের রঙ */
+    background-color: rgba(255,255,255,0.2);
     border-radius: 10px;
   }
   .menu-horizontal::-webkit-scrollbar-track {
-    background-color: transparent; /* স্ক্রোল বারের ট্র্যাকের রঙ */
+    background-color: transparent;
   }
-  /* Firefox এর জন্য স্ক্রোল বারের স্টাইল */
   .menu-horizontal {
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,0.2) transparent;
   }
-  /* অর্ধেক অপশন দেখানোর জন্য স্টাইলটি বাদ দেওয়া হয়েছে যাতে সব অপশন কাছাকাছি থাকে */
-  .menu-horizontal li:nth-child(4) {
-    min-width: auto;
-  }
-
   .menu-horizontal li{flex-shrink:0;padding:8px 14px;border-radius:8px;color:var(--muted);cursor:pointer;border:1px solid transparent}
   .menu-horizontal li:hover{background:rgba(255,255,255,0.02);color:#fff}
   .menu-horizontal li.active{background:rgba(54,214,178,0.08);color:var(--accent);font-weight:700;border:1px solid var(--accent)}
@@ -69,26 +62,34 @@
   footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
   .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   input[type="number"], select{padding:6px;border-radius:6px;border:1px solid rgba(255,255,255,0.05);background:transparent;color:inherit}
-  .tasks{display:flex;flex-direction:column;gap:10px;margin-top:12px}
-  .task{display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(255,255,255,0.02);border-radius:8px}
-  .toast{position:fixed;right:18px;bottom:18px;background:#052018;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 6px 18px rgba(0,0,0,.6);z-index:9999;color:#bfffe8}
+  
+  /* অ্যাড স্টাইলিং - মোবাইল ও ডেস্কটপ রেসপন্সিভ */
+  .ad-container {
+    margin: 20px 0;
+    text-align: center;
+  }
+  .ad-desktop { display: none; }
+  .ad-mobile { display: block; }
+  @media (min-width: 821px) {
+    .grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+    .ad-desktop { display: block; }
+    .ad-mobile { display: none; }
+  }
   @media (max-width: 820px){
     .grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
   }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="mainWrap">
   <div class="top-bar">
     <div class="logo">NoTimeFaucet</div>
     <div class="menu-wrapper">
       <ul class="menu-horizontal" id="menu">
         <li data-view="faucets" class="active">Faucets</li>
-        <li data-view="tools" style="min-width: 120px;">Auto Faucet</li>
+        <li data-view="tools">Auto Faucet</li>
         <li data-view="ptc">PTC (Ads)</li>
         <li data-view="offerwall">Offerwall</li>
-        <li data-view="games">Games</li>
-        <li data-view="mining">Mining</li>
         <li data-view="balances">My Balances</li>
       </ul>
     </div>
@@ -103,7 +104,7 @@
       </div>
     </div>
     
-    <div style="margin: 20px 0; text-align: center;">
+    <div class="ad-container">
       <script type="text/javascript">
           atOptions = {
               'key' : 'd56e7ca5c98692ba92440ebfb298a154',
@@ -141,34 +142,6 @@
         </div>
       </section>
 
-      <section id="games" class="view" style="display:none">
-        <div class="panel">
-          <h3>Dice Game</h3>
-          <div style="color:var(--muted);margin-top:6px">Bet and roll a dice -- roll 5 or 6 to win (1.8x payout).</div>
-          <div style="margin-top:12px" class="row">
-            <label>Coin:</label>
-            <select id="gameCoin">
-            </select>
-            <label>Bet:</label>
-            <input id="betAmt" type="number" min="0" value="1" />
-            <button class="btn" id="playDice">Play</button>
-          </div>
-          <div id="gameResult" style="margin-top:12px;color:var(--muted)"></div>
-        </div>
-      </section>
-
-      <section id="mining" class="view" style="display:none">
-        <div class="panel">
-          <h3>Mining Simulator</h3>
-          <div style="color:var(--muted);margin-top:6px">Start mining to slowly earn small amounts. This is simulated.</div>
-          <div style="margin-top:12px" class="row">
-            <button class="btn" id="startMine">Start Mining</button>
-            <button class="small" id="stopMine">Stop</button>
-            <div id="mineStatus" style="color:var(--muted);margin-left:8px">Stopped</div>
-          </div>
-        </div>
-      </section>
-
       <section id="tools" class="view" style="display:none">
         <div class="panel">
           <h3>Tools</h3>
@@ -189,7 +162,38 @@
         </div>
       </section>
       
-      <div style="margin: 20px 0; text-align: center;">
+      <div class="ad-container">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : 'd56e7ca5c98692ba92440ebfb298a154',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/d56e7ca5c98692ba92440ebfb298a154/invoke.js"></script>
+      </div>
+
+      <div class="ad-container">
+        <script async="async" data-cfasync="false" src="//pl27388801.profitableratecpm.com/dcd70d5b52b323db90975897fc8e1b68/invoke.js"></script>
+        <div id="container-dcd70d5b52b323db90975897fc8e1b68"></div>
+      </div>
+      
+      <div class="ad-container">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : 'd56e7ca5c98692ba92440ebfb298a154',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/d56e7ca5c98692ba92440ebfb298a154/invoke.js"></script>
+      </div>
+
+      <div class="ad-container">
         <script async="async" data-cfasync="false" src="//pl27388801.profitableratecpm.com/dcd70d5b52b323db90975897fc8e1b68/invoke.js"></script>
         <div id="container-dcd70d5b52b323db90975897fc8e1b68"></div>
       </div>
@@ -202,6 +206,8 @@
 </div>
 
 <div id="toastWrap"></div>
+
+<script type='text/javascript' src='//pl27395830.profitableratecpm.com/a3/0c/30/a30c30ae9ee57d5c076149dfb929ac21.js'></script>
 
 <script>
 /* ---------- Inline SVG icons for reliable display ---------- */
@@ -250,7 +256,7 @@ const COINS = [
 ];
 
 /* ---------- State & persistence ---------- */
-let state = { balances:{}, claims:{}, offersCompleted:[], mining:false };
+let state = { balances:{}, claims:{}, offersCompleted:[] };
 function loadState(){
   try{
     const s = JSON.parse(localStorage.getItem('nofaucet_v2')||'{}');
@@ -322,8 +328,6 @@ function renderOffers(){
 }
 
 function renderGameCoinOptions(){
-  const sel = document.getElementById('gameCoin'); sel.innerHTML='';
-  COINS.forEach(c=>{ const opt = document.createElement('option'); opt.value=c.id; opt.textContent=`${c.name} (${c.id})`; sel.appendChild(opt); });
   const auto = document.getElementById('autoCoin'); auto.innerHTML='';
   COINS.forEach(c=>{ const opt=document.createElement('option'); opt.value=c.id; opt.textContent=`${c.name} (${c.id})`; auto.appendChild(opt); });
 }
@@ -342,51 +346,12 @@ function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
 
 function handleClaim(coinId){
   const coin = COINS.find(c=>c.id===coinId); if(!coin) return;
-  // no cooldown -- immediate claim
   const pick = randInt(coin.min, coin.max);
-  const amount = (pick/1000) * coin.scale; // scale down, then multiply
+  const amount = (pick/1000) * coin.scale;
   state.balances[coinId] = Number((Number(state.balances[coinId]||0) + amount).toFixed(8));
   state.claims[coinId] = (state.claims[coinId]||0) + 1;
   saveState(); renderCoins(); renderSummary();
   toast(`Claimed ${formatNum(amount)} ${coinId}`);
-}
-
-/* Games */
-function playDice(){
-  const coin = document.getElementById('gameCoin').value;
-  const bet = Number(document.getElementById('betAmt').value) || 0;
-  if(bet<=0){ toast('Enter a bet'); return; }
-  if((state.balances[coin]||0) < bet){ toast('Insufficient balance'); return; }
-  const roll = randInt(1,6);
-  const win = roll >= 5;
-  if(win){
-    const profit = Number((bet * 1.8).toFixed(8));
-    state.balances[coin] = Number((Number(state.balances[coin]||0) + profit).toFixed(8));
-    document.getElementById('gameResult').textContent = `You rolled ${roll} -- You won ${formatNum(profit)} ${coin}`;
-    toast(`Game win +${formatNum(profit)} ${coin}`);
-  } else {
-    state.balances[coin] = Number((Number(state.balances[coin]||0) - bet).toFixed(8));
-    document.getElementById('gameResult').textContent = `You rolled ${roll} -- You lost ${formatNum(bet)} ${coin}`;
-    toast(`Game lost -${formatNum(bet)} ${coin}`);
-  }
-  saveState(); renderSummary(); renderCoins(); renderAllBalances();
-}
-
-/* Mining simulator */
-let minerInterval = null;
-function startMining(){
-  if(minerInterval) return;
-  minerInterval = setInterval(()=>{
-    const c = COINS[randInt(0, COINS.length-1)];
-    const gain = Number((Math.random()*0.05* (c.scale||1)).toFixed(8));
-    state.balances[c.id] = Number((state.balances[c.id]||0) + gain).toFixed(8);
-    saveState(); renderSummary(); renderCoins();
-  }, 4000);
-  document.getElementById('mineStatus').textContent = 'Mining...';
-  toast('Mining started');
-}
-function stopMining(){
-  if(minerInterval){ clearInterval(minerInterval); minerInterval=null; document.getElementById('mineStatus').textContent='Stopped'; toast('Mining stopped'); }
 }
 
 /* PTC ad view */
@@ -435,16 +400,21 @@ function setupMenu(){
   });
 }
 
-// স্ক্রল ইভেন্ট ট্র্যাকার
-let scrollAdOpened = false;
-function setupScrollAd() {
-  window.addEventListener('scroll', () => {
+// স্ক্রল, ক্লিক বা টাচ ইভেন্ট ট্র্যাকার
+let adOpened = false;
+function setupDirectLinkAd() {
+  const openAd = () => {
     // শুধুমাত্র একবার অ্যাডটি খুলবে
-    if (!scrollAdOpened) {
+    if (!adOpened) {
       window.open('https://www.profitableratecpm.com/v93jbm26p?key=bdf7ac59f2439455480faa5abee49eb5', '_blank');
-      scrollAdOpened = true; // অ্যাড একবার খোলার পর ফ্ল্যাগটি true করে দেওয়া হবে
+      adOpened = true; 
     }
-  });
+  };
+
+  // স্ক্রল ইভেন্ট
+  window.addEventListener('scroll', openAd);
+  // টাচ/ক্লিক ইভেন্ট
+  document.getElementById('mainWrap').addEventListener('click', openAd);
 }
 
 
@@ -454,12 +424,9 @@ function init(){
   renderCoins();
   renderSummary();
   renderGameCoinOptions();
-  setupScrollAd(); // নতুন স্ক্রল অ্যাড ফাংশনটি কল করা হয়েছে
+  setupDirectLinkAd(); 
 
   // event bindings
-  document.getElementById('playDice').addEventListener('click', playDice);
-  document.getElementById('startMine').addEventListener('click', ()=>startMining());
-  document.getElementById('stopMine').addEventListener('click', stopMining);
   document.getElementById('viewAd').addEventListener('click', viewAd);
   document.getElementById('toggleAuto').addEventListener('click', toggleAuto);
 }
