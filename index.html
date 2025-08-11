@@ -11,7 +11,7 @@
     --card:#08161a;
   }
   *{box-sizing:border-box;font-family:Inter,Segoe UI,Roboto,'Noto Sans',Arial,sans-serif}
-  body{margin:0;background:linear-gradient(180deg,var(--bg),#031217);color:#eaf8f6}
+  body{margin:0;background:linear-gradient(180deg,var(--bg),#031217);color:#eaf8e6}
   .wrap{min-height:100vh;display:flex;flex-direction:column}
   .top-bar{padding:10px 18px;background:linear-gradient(180deg,#041016 0%, #07151a 100%);border-bottom:1px solid rgba(255,255,255,0.03)}
   .logo{font-weight:800;font-size:18px;color:var(--accent)}
@@ -28,7 +28,7 @@
     list-style:none;
     padding:0;
     margin:12px 0 0 0;
-    gap:8px;
+    gap:4px;
     padding-bottom:10px;
   }
   .menu-horizontal::-webkit-scrollbar{
@@ -46,9 +46,9 @@
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,0.2) transparent;
   }
-  /* অর্ধেক অপশন দেখানোর জন্য */
+  /* অর্ধেক অপশন দেখানোর জন্য স্টাইলটি বাদ দেওয়া হয়েছে যাতে সব অপশন কাছাকাছি থাকে */
   .menu-horizontal li:nth-child(4) {
-    min-width: 50%;
+    min-width: auto;
   }
 
   .menu-horizontal li{flex-shrink:0;padding:8px 14px;border-radius:8px;color:var(--muted);cursor:pointer;border:1px solid transparent}
@@ -227,7 +227,7 @@ const ICONS = {
     <circle cx="32" cy="32" r="30" fill="#1a6ab9"/><path d="M18 30 L32 24 L46 30 L32 36 Z" fill="#fff"/></svg>`,
   TRX:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
     <circle cx="32" cy="32" r="30" fill="#ff0022"/><polygon points="32,14 18,46 46,46" fill="#fff"/></svg>`,
-  GGM:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  GGM:`<svg viewBox="0 0 0 64 64" xmlns="http://www.w3.org/2000/svg">
     <circle cx="32" cy="32" r="30" fill="#3a1f5b"/><text x="32" y="38" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">👾</text></svg>`,
   SOL:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
     <rect width="64" height="64" fill="none"/><g transform="translate(8,16)"><rect x="0" y="0" width="48" height="8" rx="3" fill="#00FFA3" opacity="0.9"/><rect x="0" y="12" width="48" height="8" rx="3" fill="#7A5FFF" opacity="0.9"/><rect x="0" y="24" width="48" height="8" rx="3" fill="#00FFA3" opacity="0.9"/></g></svg>`
@@ -435,12 +435,26 @@ function setupMenu(){
   });
 }
 
+// স্ক্রল ইভেন্ট ট্র্যাকার
+let scrollAdOpened = false;
+function setupScrollAd() {
+  window.addEventListener('scroll', () => {
+    // শুধুমাত্র একবার অ্যাডটি খুলবে
+    if (!scrollAdOpened) {
+      window.open('https://www.profitableratecpm.com/v93jbm26p?key=bdf7ac59f2439455480faa5abee49eb5', '_blank');
+      scrollAdOpened = true; // অ্যাড একবার খোলার পর ফ্ল্যাগটি true করে দেওয়া হবে
+    }
+  });
+}
+
+
 function init(){
   loadState();
   setupMenu();
   renderCoins();
   renderSummary();
   renderGameCoinOptions();
+  setupScrollAd(); // নতুন স্ক্রল অ্যাড ফাংশনটি কল করা হয়েছে
 
   // event bindings
   document.getElementById('playDice').addEventListener('click', playDice);
